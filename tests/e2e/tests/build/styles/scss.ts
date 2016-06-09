@@ -7,8 +7,14 @@ import {
 import { ng } from '../../../utils/process';
 import { stripIndents } from 'common-tags';
 import { updateJsonFile } from '../../../utils/project';
+import { isMobileTest, getAppMain } from '../../../utils/utils';
+
 
 export default function () {
+  if (isMobileTest()) {
+    return;
+  }
+
   return writeMultipleFiles({
     'src/styles.scss': stripIndents`
       @import './imported-styles.scss';

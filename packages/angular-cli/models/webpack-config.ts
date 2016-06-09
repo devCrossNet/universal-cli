@@ -9,14 +9,14 @@ import { getWebpackDevConfigPartial } from './webpack-build-development';
 import { getWebpackProdConfigPartial } from './webpack-build-production';
 import {
   getWebpackMobileConfigPartial,
-  getWebpackMobileProdConfigPartial
-} from './webpack-build-mobile';
-
+  getWebpackMobileProdConfigPartial,
+  getWebpackNodeConfig
+} from './';
 
 export class NgCliWebpackConfig {
   // TODO: When webpack2 types are finished lets replace all these any types
   // so this is more maintainable in the future for devs
-  public config: any;
+  public configs: any[] = [];
 
   constructor(
     public ngCliProject: any,
@@ -34,6 +34,10 @@ export class NgCliWebpackConfig {
     const appConfig = config.config.apps[0];
 
     appConfig.outDir = outputDir || appConfig.outDir;
+
+    if (appConfig.universal === true && isAoT === true) {
+      throw new Error('AoT is not supported in universal yet.');
+    }
 
     let baseConfig = getWebpackCommonConfig(
       this.ngCliProject.root,
@@ -62,11 +66,15 @@ export class NgCliWebpackConfig {
       }
     }
 
-    this.config = webpackMerge(
+    this.configs.push(webpackMerge(
       baseConfig,
       targetConfigPartial,
       typescriptConfigPartial
-    );
+    ));
+
+    if (appConfig.universal === true) {
+      this.configs.push(getWebpackNodeConfig(this.ngCliProject.root, environment, appConfig));
+    }
   }
 
   getTargetConfig(projectRoot: string, appConfig: any, sourcemap: boolean, verbose: boolean): any {

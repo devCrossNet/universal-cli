@@ -37,14 +37,14 @@ export function getWebpackCommonConfig(
   const appRoot = path.resolve(projectRoot, appConfig.root);
   const appMain = path.resolve(appRoot, appConfig.main);
   const nodeModules = path.resolve(projectRoot, 'node_modules');
+  const entryName: string = path.basename(appMain).replace('.ts', '');
 
   let extraPlugins: any[] = [];
   let extraRules: any[] = [];
   let lazyChunks: string[] = [];
 
-  let entryPoints: { [key: string]: string[] } = {
-    main: [appMain]
-  };
+  let entryPoints: { [key: string]: string[] } = {};
+  entryPoints[entryName] = [appMain];
 
   if (!(environment in appConfig.environments)) {
     throw new SilentError(`Environment "${environment}" does not exist.`);

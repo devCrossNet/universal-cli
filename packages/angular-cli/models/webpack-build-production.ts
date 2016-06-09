@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 const WebpackMd5Hash = require('webpack-md5-hash');
+const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 import {CompressionPlugin} from '../lib/webpack/compression-plugin';
 const autoprefixer = require('autoprefixer');
@@ -22,7 +23,24 @@ export const getWebpackProdConfigPartial = function(projectRoot: string,
                                                     verbose: any) {
   const appRoot = path.resolve(projectRoot, appConfig.root);
 
-  return {
+  let universalPartial: any = {};
+
+  if (appConfig.universal === true) {
+    universalPartial.module = {
+      rules: [
+        {
+          test: /index\.html$/,
+          loader: 'string-replace',
+          query: {
+            search: '<script src="http://localhost:35729/livereload.js?snipver=1"></script>',
+            replace: ''
+          }
+        }
+      ]
+    };
+  }
+
+  const baseConfig: any = {
     output: {
       path: path.resolve(projectRoot, appConfig.outDir),
       filename: '[name].[chunkhash].bundle.js',
@@ -65,4 +83,6 @@ export const getWebpackProdConfigPartial = function(projectRoot: string,
       })
     ]
   };
+
+  return webpackMerge(baseConfig, universalPartial);
 };

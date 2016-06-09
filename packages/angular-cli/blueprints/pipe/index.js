@@ -18,7 +18,7 @@ module.exports = {
 
   beforeInstall: function(options) {
     try {
-      this.pathToModule = findParentModule(this.project, this.dynamicPath.dir);
+      this.modulePaths = findParentModule(this.project, this.dynamicPath.dir);
     } catch(e) {
       if (!options.skipImport) {
         throw `Error locating module for declaration\n\t${e}`;
@@ -68,7 +68,7 @@ module.exports = {
     };
   },
 
-  afterInstall: function(options) {
+  afterInstall: function (options) {
     if (options.dryRun) {
       return;
     }
@@ -76,16 +76,19 @@ module.exports = {
     const returns = [];
     const className = stringUtils.classify(`${options.entity.name}Pipe`);
     const fileName = stringUtils.dasherize(`${options.entity.name}.pipe`);
-    const fullGeneratePath = path.join(this.project.root, this.generatePath);
-    const moduleDir = path.parse(this.pathToModule).dir;
-    const relativeDir = path.relative(moduleDir, fullGeneratePath);
-    const importPath = relativeDir ? `./${relativeDir}/${fileName}` : `./${fileName}`;
 
-    if (!options.skipImport) {
-      returns.push(
-        astUtils.addDeclarationToModule(this.pathToModule, className, importPath)
-          .then(change => change.apply(NodeHost)));
-    }
+    this.modulePaths.forEach((pathToModule) => {
+      const fullGeneratePath = path.join(this.project.root, this.generatePath);
+      const moduleDir = path.parse(this.pathToModule).dir;
+      const relativeDir = path.relative(moduleDir, fullGeneratePath);
+      const importPath = relativeDir ? `./${relativeDir}/${fileName}` : `./${fileName}`;
+
+      if (!options.skipImport) {
+        returns.push(
+          astUtils.addDeclarationToModule(this.pathToModule, className, importPath)
+            .then(change => change.apply(NodeHost)));
+      }
+    });
 
     return Promise.all(returns);
   }

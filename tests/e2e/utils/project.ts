@@ -7,7 +7,6 @@ const packages = require('../../../lib/packages');
 
 const tsConfigPath = 'src/tsconfig.json';
 
-
 export function updateJsonFile(filePath: string, fn: (json: any) => any | void) {
   return readFile(filePath)
     .then(tsConfigJson => {
@@ -18,11 +17,9 @@ export function updateJsonFile(filePath: string, fn: (json: any) => any | void) 
     });
 }
 
-
 export function updateTsConfig(fn: (json: any) => any | void) {
   return updateJsonFile(tsConfigPath, fn);
 }
-
 
 export function ngServe(...args: string[]) {
   return silentExecAndWaitForOutputToMatch('ng',

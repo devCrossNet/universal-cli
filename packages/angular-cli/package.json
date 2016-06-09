@@ -1,9 +1,9 @@
 {
-  "name": "angular-cli",
-  "version": "1.0.0-beta.19-3",
-  "description": "CLI tool for Angular",
+  "name": "universal-cli",
+  "version": "1.0.0-beta.1",
+  "description": "CLI tool for Angular with Angular Universal support",
   "main": "lib/cli/index.js",
-  "trackingCode": "UA-8594346-19",
+  "trackingCode": "",
   "bin": {
     "ng": "./bin/ng"
   },
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/angular/angular-cli.git"
+    "url": "https://github.com/devCrossNet/angular-cli.git"
   },
   "engines": {
     "node": ">= 4.1.0",
@@ -21,9 +21,9 @@
   "author": "Angular Authors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/angular/angular-cli/issues"
+    "url": "https://github.com/devCrossNet/angular-cli/issues"
   },
-  "homepage": "https://github.com/angular/angular-cli",
+  "homepage": "https://github.com/devCrossNet/angular-cli",
   "dependencies": {
     "@angular-cli/ast-tools": "^1.0.1",
     "@angular-cli/base-href-webpack": "^1.0.0",
@@ -65,6 +65,7 @@
     "less-loader": "^2.2.3",
     "lodash": "^4.11.1",
     "node-sass": "^3.10.1",
+    "nodemon": "^1.10.0",
     "npm-run-all": "^3.0.0",
     "offline-plugin": "^3.4.1",
     "opn": "4.0.1",
@@ -87,6 +88,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.0",
     "symlink-or-copy": "^1.0.3",
+    "tiny-lr": "^0.2.1",
     "ts-loader": "^0.8.2",
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.4",

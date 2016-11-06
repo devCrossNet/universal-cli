@@ -6,7 +6,7 @@ import {updateTsConfig, updateJsonFile} from '../utils/project';
 import {gitClean, gitCommit} from '../utils/git';
 
 
-export default function(argv: any) {
+export default function (argv: any) {
   let createProject = null;
 
   // This is a dangerous flag, but is useful for testing packages only.
@@ -30,7 +30,7 @@ export default function(argv: any) {
     .then(() => createProject)
     .then(() => updateJsonFile('package.json', json => {
       const dist = join(__dirname, '../../../dist/');
-      json['devDependencies']['angular-cli'] = join(dist, 'angular-cli');
+      json['devDependencies']['universal-cli'] = join(dist, 'angular-cli');
       json['devDependencies']['@angular-cli/ast-tools'] = join(dist, 'ast-tools');
       json['devDependencies']['@angular-cli/base-href-webpack'] = join(dist, 'base-href-webpack');
       json['devDependencies']['@ngtools/webpack'] = join(dist, 'webpack');
@@ -50,6 +50,13 @@ export default function(argv: any) {
             'platform-browser-dynamic'
           ];
           angularPackages.forEach(pkgName => {
+            /**
+             * change package name to angular-cli because
+             * there is no universal-cli package at /angular
+             */
+            if (pkgName === 'universal-cli') {
+              pkgName = 'angular-cli';
+            }
             json['dependencies'][`@angular/${pkgName}`] = `github:angular/${pkgName}-builds`;
           });
         });

@@ -4,6 +4,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 import * as webpack from 'webpack';
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 declare module 'webpack' {
   export interface LoaderOptionsPlugin {}
@@ -78,6 +79,7 @@ export const getWebpackProdConfigPartial = function(projectRoot: string, appConf
       new webpack.optimize.UglifyJsPlugin(<any>{
         mangle: { screw_ie8 : true },
         compress: { screw_ie8: true },
+        output: {comments: false},
         sourceMap: true
       }),
       new CompressionPlugin({
@@ -87,6 +89,7 @@ export const getWebpackProdConfigPartial = function(projectRoot: string, appConf
         threshold: 10240,
         minRatio: 0.8
       }),
+      new BundleAnalyzerPlugin({analyzerMode: 'static', openAnalyzer: true}),
       new webpack.LoaderOptionsPlugin({
         options: {
           postcss: [

@@ -82,4 +82,4 @@ app.get('*', function(req: any, res: any) {
 
 app.listen(port, () => {
   console.log(`Listening on port {port}`);
-}));
+});

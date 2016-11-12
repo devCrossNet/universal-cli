@@ -1,10 +1,10 @@
-import {join} from 'path';
-import {git, ng, silentNpm} from '../utils/process';
-import {isMobileTest, isUniversalTest} from '../utils/utils';
-import {expectFileToExist} from '../utils/fs';
-import {updateTsConfig, updateJsonFile} from '../utils/project';
-import {gitClean, gitCommit} from '../utils/git';
-import {getGlobalVariable} from '../utils/env';
+import { join } from 'path';
+import { git, ng, silentNpm } from '../utils/process';
+import { isMobileTest, isUniversalTest } from '../utils/utils';
+import { expectFileToExist } from '../utils/fs';
+import { updateTsConfig, updateJsonFile } from '../utils/project';
+import { gitClean, gitCommit } from '../utils/git';
+import { getGlobalVariable } from '../utils/env';
 
 
 let packages = require('../../../lib/packages');

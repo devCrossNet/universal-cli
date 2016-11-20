@@ -26,6 +26,10 @@ export function ngServe(...args: string[]) {
     ['serve', ...args], /webpack: bundle is now VALID/);
 }
 
+export function ngUniversalServe(...args: string[]) {
+  return silentExecAndWaitForOutputToMatch('ng',
+    ['serve', ...args], /Listening on port 4200/);
+}
 
 export function createProject(name: string, ...args: string[]) {
   return Promise.resolve()

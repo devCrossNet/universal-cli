@@ -57,7 +57,7 @@ function ngApp(req: any, res: any) {
     req,
     res,
     ngModule: AppModule,
-    preboot: true,
+    preboot: false,
     baseUrl: '/',
     requestUrl: req.originalUrl,
     originUrl: req.hostname

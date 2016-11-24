@@ -108,12 +108,12 @@ export function ng(...args: string[]) {
   if (args[0] == 'build' || args[0] == 'serve' || args[0] == 'test') {
     return silentNg(...args, '--no-progress');
   } else {
-    return _exec({}, 'ng', args);
+    return _exec({}, 'ung', args);
   }
 }
 
 export function silentNg(...args: string[]) {
-  return _exec({silent: true}, 'ng', args);
+  return _exec({silent: true}, 'ung', args);
 }
 
 export function silentNpm(...args: string[]) {

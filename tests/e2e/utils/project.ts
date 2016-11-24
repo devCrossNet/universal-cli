@@ -22,12 +22,12 @@ export function updateTsConfig(fn: (json: any) => any | void) {
 }
 
 export function ngServe(...args: string[]) {
-  return silentExecAndWaitForOutputToMatch('ng',
+  return silentExecAndWaitForOutputToMatch('ung',
     ['serve', ...args], /webpack: bundle is now VALID/);
 }
 
 export function ngUniversalServe(...args: string[]) {
-  return silentExecAndWaitForOutputToMatch('ng',
+  return silentExecAndWaitForOutputToMatch('ung',
     ['serve', ...args], /Listening on port 4200/);
 }
 

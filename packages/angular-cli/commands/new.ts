@@ -10,7 +10,7 @@ const validProjectName = require('../ember-cli/lib/utilities/valid-project-name'
 
 const NewCommand = Command.extend({
   name: 'new',
-  description: `Creates a new directory and runs ${chalk.green('ng init')} in it.`,
+  description: `Creates a new directory and runs ${chalk.green('ung init')} in it.`,
   works: 'outsideProject',
 
   availableOptions: [
@@ -36,8 +36,8 @@ const NewCommand = Command.extend({
 
     if (!packageName) {
       return Promise.reject(new SilentError(
-        `The "ng ${this.name}" command requires a name argument to be specified. ` +
-        `For more details, use "ng help".`));
+        `The "ung ${this.name}" command requires a name argument to be specified. ` +
+        `For more details, use "ung help".`));
     }
     if (!packageName.match(/^[a-zA-Z][.0-9a-zA-Z]*(-[a-zA-Z][.0-9a-zA-Z]*)*$/)) {
       return Promise.reject(new SilentError(oneLine`
@@ -53,7 +53,7 @@ const NewCommand = Command.extend({
 
     if (packageName === '.') {
       return Promise.reject(new SilentError(
-        `Trying to generate an application structure in this directory? Use "ng init" ` +
+        `Trying to generate an application structure in this directory? Use "ung init" ` +
         `instead.`));
     }
 

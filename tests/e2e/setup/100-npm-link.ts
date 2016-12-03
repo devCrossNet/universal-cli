@@ -14,7 +14,7 @@ export default function () {
         return;
       }
 
-      const distAngularCli = join(__dirname, '../../../dist/angular-cli');
+      const distAngularCli = join(__dirname, '../../../dist/universal-cli');
       const oldCwd = process.cwd();
       process.chdir(distAngularCli);
 

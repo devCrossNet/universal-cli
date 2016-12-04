@@ -7,7 +7,7 @@ import {
 import { ng } from '../../../utils/process';
 import { stripIndents } from 'common-tags';
 import { updateJsonFile } from '../../../utils/project';
-import { isMobileTest, getAppMain } from '../../../utils/utils';
+import { isMobileTest, getAppMain, getClientDist } from '../../../utils/utils';
 
 
 export default function () {
@@ -38,9 +38,10 @@ export default function () {
     .then(() => replaceInFile('src/app/app.component.ts',
       './app.component.css', './app.component.scss'))
     .then(() => ng('build'))
-    .then(() => expectFileToMatch('dist/styles.bundle.css',
+    .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`,
       /body\s*{\s*background-color: blue;\s*}/))
-    .then(() => expectFileToMatch('dist/styles.bundle.css',
+    .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`,
       /p\s*{\s*background-color: red;\s*}/))
-    .then(() => expectFileToMatch('dist/main.bundle.js', /.outer.*.inner.*background:\s*#[fF]+/));
+    .then(() => expectFileToMatch(`${getClientDist()}${getAppMain()}.bundle.js`,
+      /.outer.*.inner.*background:\s*#[fF]+/));
 }

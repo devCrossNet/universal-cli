@@ -7,6 +7,7 @@ import { ng } from '../../../utils/process';
 import { updateJsonFile } from '../../../utils/project';
 import { expectToFail } from '../../../utils/utils';
 import { oneLineTrim } from 'common-tags';
+import { getAppMain, getClientDist } from '../../../utils/utils';
 
 export default function () {
   return writeMultipleFiles({
@@ -32,28 +33,28 @@ export default function () {
     }))
     .then(() => ng('build'))
     // files were created successfully
-    .then(() => expectFileToMatch('dist/styles.bundle.css', '.string-style'))
-    .then(() => expectFileToMatch('dist/styles.bundle.css', '.input-style'))
-    .then(() => expectFileToMatch('dist/lazy-style.bundle.css', '.lazy-style'))
-    .then(() => expectFileToMatch('dist/renamed-style.bundle.css', '.pre-rename-style'))
-    .then(() => expectFileToMatch('dist/renamed-lazy-style.bundle.css', '.pre-rename-lazy-style'))
-    .then(() => expectFileToMatch('dist/common-entry.bundle.css', '.common-entry-style'))
-    .then(() => expectFileToMatch('dist/common-entry.bundle.js', 'common-entry-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`, '.string-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`, '.input-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/lazy-style.bundle.css`, '.lazy-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-style.bundle.css`, '.pre-rename-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-style.bundle.css`, '.pre-rename-lazy-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`, '.common-entry-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`, 'common-entry-script'))
     // there are no js entry points for css only bundles
-    .then(() => expectToFail(() => expectFileToExist('dist/styles.bundle.js')))
-    .then(() => expectToFail(() => expectFileToExist('dist/lazy-styles.bundle.js')))
-    .then(() => expectToFail(() => expectFileToExist('dist/renamed-styles.bundle.js')))
-    .then(() => expectToFail(() => expectFileToExist('dist/renamed-lazy-styles.bundle.js')))
+    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/styles.bundle.js`)))
+    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/lazy-styles.bundle.js`)))
+    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/renamed-styles.bundle.js`)))
+    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/renamed-lazy-styles.bundle.js`)))
     // index.html lists the right bundles
-    .then(() => expectFileToMatch('dist/index.html', oneLineTrim`
+    .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <link href="renamed-style.bundle.css" rel="stylesheet">
       <link href="styles.bundle.css" rel="stylesheet">
       <link href="common-entry.bundle.css" rel="stylesheet">
     `))
-    .then(() => expectFileToMatch('dist/index.html', oneLineTrim`
+    .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <script type="text/javascript" src="inline.bundle.js"></script>
       <script type="text/javascript" src="vendor.bundle.js"></script>
       <script type="text/javascript" src="common-entry.bundle.js"></script>
-      <script type="text/javascript" src="main.bundle.js"></script>
+      <script type="text/javascript" src="${getAppMain()}.bundle.js"></script>
     `));
 }

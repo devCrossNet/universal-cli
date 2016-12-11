@@ -91,13 +91,13 @@ module.exports = {
 
     this.modulePaths.forEach((pathToModule) => {
       const fullGeneratePath = path.join(this.project.root, this.generatePath);
-      const moduleDir = path.parse(this.pathToModule).dir;
+      const moduleDir = path.parse(pathToModule).dir;
       const relativeDir = path.relative(moduleDir, fullGeneratePath);
       const importPath = relativeDir ? `./${relativeDir}/${fileName}` : `./${fileName}`;
 
       if (!options.skipImport) {
         returns.push(
-          astUtils.addDeclarationToModule(this.pathToModule, className, importPath)
+          astUtils.addDeclarationToModule(pathToModule, className, importPath)
             .then(change => change.apply(NodeHost)));
       }
     });

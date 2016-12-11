@@ -146,7 +146,7 @@ module.exports = {
 
       if (!options.skipImport) {
         returns.push(
-          astUtils.addDeclarationToModule(this.pathToModule, className, importPath)
+          astUtils.addDeclarationToModule(pathToModule, className, importPath)
             .then(change => change.apply(NodeHost)));
       }
     });

@@ -1,7 +1,7 @@
 {
   "name": "universal-cli",
   "version": "1.0.0-alpha.universal.2-2",
-  "cliVersion": "1.0.0-beta.20-1",
+  "cliVersion": "1.0.0-beta.22",
   "description": "CLI tool for Angular with Angular Universal support",
   "main": "lib/cli/index.js",
   "trackingCode": "xx-xxxxxxx-xx",
@@ -70,7 +70,6 @@
     "node-modules-path": "^1.0.0",
     "node-sass": "^3.10.1",
     "nodemon": "^1.10.0",
-    "node-uuid": "^1.4.3",
     "nopt": "^3.0.1",
     "offline-plugin": "^3.4.1",
     "opn": "4.0.1",

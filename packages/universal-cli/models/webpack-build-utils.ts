@@ -22,7 +22,7 @@ export const ngAppResolve = (resolvePath: string): string => {
   return path.resolve(process.cwd(), resolvePath);
 };
 
-const webpackOutputOptions = {
+export const webpackOutputOptions = {
   colors: true,
   hash: true,
   timings: true,

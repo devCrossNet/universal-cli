@@ -99,7 +99,7 @@ export function getWebpackCommonConfig(
   if (vendorChunk) {
     extraPlugins.push(new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      chunks: ['main'],
+      chunks: [(appConfig.universal === true ? 'client' : 'main')],
       minChunks: (module: any) => module.userRequest && module.userRequest.startsWith(nodeModules)
     }));
   }

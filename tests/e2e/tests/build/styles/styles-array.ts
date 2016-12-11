@@ -36,15 +36,21 @@ export default function () {
     .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`, '.string-style'))
     .then(() => expectFileToMatch(`${getClientDist()}/styles.bundle.css`, '.input-style'))
     .then(() => expectFileToMatch(`${getClientDist()}/lazy-style.bundle.css`, '.lazy-style'))
-    .then(() => expectFileToMatch(`${getClientDist()}/renamed-style.bundle.css`, '.pre-rename-style'))
-    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-style.bundle.css`, '.pre-rename-lazy-style'))
-    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`, '.common-entry-style'))
-    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`, 'common-entry-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-style.bundle.css`,
+    '.pre-rename-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-style.bundle.css`,
+    '.pre-rename-lazy-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`,
+    '.common-entry-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`,
+    'common-entry-script'))
     // there are no js entry points for css only bundles
     .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/styles.bundle.js`)))
     .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/lazy-styles.bundle.js`)))
-    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/renamed-styles.bundle.js`)))
-    .then(() => expectToFail(() => expectFileToExist(`${getClientDist()}/renamed-lazy-styles.bundle.js`)))
+    .then(() => expectToFail(() =>
+      expectFileToExist(`${getClientDist()}/renamed-styles.bundle.js`)))
+    .then(() => expectToFail(() =>
+      expectFileToExist(`${getClientDist()}/renamed-lazy-styles.bundle.js`)))
     // index.html lists the right bundles
     .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <link href="renamed-style.bundle.css" rel="stylesheet">

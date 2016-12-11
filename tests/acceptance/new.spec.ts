@@ -139,7 +139,8 @@ describe('Acceptance: ung new', function () {
     });
   });
 
-  it('ung new with --directory uses given directory name and has correct package name', function () {
+  it('ung new with --directory uses given directory name and has correct package name', function ()
+  {
     return ng(['new', 'foo', '--skip-npm', '--skip-bower', '--skip-git', '--directory=bar'])
       .then(function () {
         const cwd = process.cwd();

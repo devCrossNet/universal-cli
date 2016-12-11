@@ -58,7 +58,9 @@ export default Task.extend({
     // https://webpack.github.io/docs/webpack-dev-server.html#inline-mode
     if (appConfig.universal === false) {
       configs[0].entry['main']
-        .unshift(`webpack-dev-server/client?http://${serveTaskOptions.host}:${serveTaskOptions.port}/`);
+        .unshift(
+          `webpack-dev-server/client?http://${serveTaskOptions.host}:${serveTaskOptions.port}/`
+        );
     }
 
     webpackCompiler = webpack(configs);

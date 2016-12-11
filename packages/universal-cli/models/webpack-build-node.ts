@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 const webpackMerge = require('webpack-merge');
-const CompressionPlugin = require('compression-webpack-plugin');
+import {CompressionPlugin} from '../lib/webpack/compression-plugin';
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 export function getWebpackNodeConfig(projectRoot: string, environment: string, appConfig: any) {

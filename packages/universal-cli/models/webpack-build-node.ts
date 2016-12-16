@@ -14,6 +14,8 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
   };
   const appRoot = path.resolve(projectRoot, appConfig.root);
   const nodeMain = path.resolve(appRoot, appConfig.nodeMain);
+  const nodeModules = path.resolve(projectRoot, 'node_modules')
+
   const styles = appConfig.styles
     ? appConfig.styles.map((style: string) => path.resolve(appRoot, style))
     : [];
@@ -21,13 +23,13 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
     ? appConfig.scripts.map((script: string) => path.resolve(appRoot, script))
     : [];
   const entryName: string = path.basename(nodeMain).replace('.ts', '');
-  let entry: { [key: string]: string[] } = {};
-  entry[entryName] = [nodeMain];
+  let entryPoints: { [key: string]: string[] } = {};
+  entryPoints[entryName] = [nodeMain];
 
   const commonConfig: any = {
     resolve: {
       extensions: ['.ts', '.js'],
-      modules: [path.resolve(projectRoot, 'node_modules')]
+      modules: [nodeModules]
     },
     context: path.resolve(__dirname, './'),
     output: {
@@ -44,19 +46,6 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
           exclude: [
             /node_modules/
           ]
-        },
-        {
-          test: /\.ts$/,
-          loaders: [{
-            loader: 'awesome-typescript-loader',
-            query: {
-              useForkChecker: true,
-              tsconfig: path.resolve(appRoot, appConfig.tsconfig)
-            }
-          }, {
-            loader: 'angular2-template-loader'
-          }],
-          exclude: [/\.(spec|e2e)\.ts$/]
         },
         // in main, load css as raw text
         {
@@ -77,7 +66,6 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
           test: /\.scss$|\.sass$/,
           loaders: ['raw-loader', 'postcss-loader', 'sass-loader']
         },
-
 
         // load global scripts using script-loader
         {include: scripts, test: /\.js$/, loader: 'script-loader'},
@@ -106,7 +94,7 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
         path.resolve(appRoot, appConfig.environments[environment])
       ),
     ],
-    entry: entry,
+    entry: entryPoints,
     target: 'node',
     externals: checkNodeImport,
     node: {

@@ -81,7 +81,12 @@ export class NgCliWebpackConfig {
       ));
 
       this.configs.push(webpackMerge(
-        getWebpackNodeConfig(this.ngCliProject.root, environment, appConfig),
+        typescriptConfigPartial,
+        getWebpackNodeConfig(
+          this.ngCliProject.root,
+          environment,
+          appConfig
+        ),
         customServerConfig
       ));
     } else {

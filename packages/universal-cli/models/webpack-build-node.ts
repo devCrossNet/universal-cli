@@ -1,10 +1,18 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 const webpackMerge = require('webpack-merge');
-const CompressionPlugin = require('compression-webpack-plugin');
+import {CompressionPlugin} from '../lib/webpack/compression-plugin';
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const postcssDiscardComments = require('postcss-discard-comments');
+const autoprefixer = require('autoprefixer');
+import { SuppressEntryChunksWebpackPlugin } from '../plugins/suppress-entry-chunks-webpack-plugin';
+import { extraEntryParser, makeCssLoaders } from './webpack-build-utils';
 
-export function getWebpackNodeConfig(projectRoot: string, environment: string, appConfig: any) {
+export function getWebpackNodeConfig(
+  projectRoot: string,
+  environment: string,
+  appConfig: any,
+  sourcemap: boolean) {
   const checkNodeImport = function (context: any, request: any, cb: any) {
     if (!path.isAbsolute(request) && request.charAt(0) !== '.') {
       cb(null, 'commonjs ' + request);
@@ -14,22 +22,68 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
   };
   const appRoot = path.resolve(projectRoot, appConfig.root);
   const nodeMain = path.resolve(appRoot, appConfig.nodeMain);
-  const styles = appConfig.styles
-    ? appConfig.styles.map((style: string) => path.resolve(appRoot, style))
-    : [];
-  const scripts = appConfig.scripts
-    ? appConfig.scripts.map((script: string) => path.resolve(appRoot, script))
-    : [];
+  const nodeModules = path.resolve(projectRoot, 'node_modules');
   const entryName: string = path.basename(nodeMain).replace('.ts', '');
-  let entry: { [key: string]: string[] } = {};
-  entry[entryName] = [nodeMain];
+
+  let extraPlugins: any[] = [];
+  let extraRules: any[] = [];
+  let lazyChunks: string[] = [];
+
+  let entryPoints: { [key: string]: string[] } = {};
+  entryPoints[entryName] = [nodeMain];
+
+  // process global scripts
+  if (appConfig.scripts.length > 0) {
+    const globalScripts = extraEntryParser(appConfig.scripts, appRoot, 'scripts');
+
+    // add entry points and lazy chunks
+    globalScripts.forEach(script => {
+      if (script.lazy) { lazyChunks.push(script.entry); }
+      entryPoints[script.entry] = (entryPoints[script.entry] || []).concat(script.path);
+    });
+
+    // load global scripts using script-loader
+    extraRules.push({
+      include: globalScripts.map((script) => script.path), test: /\.js$/, loader: 'script-loader'
+    });
+  }
+
+  // process global styles
+  if (appConfig.styles.length === 0) {
+    // create css loaders for component css
+    extraRules.push(...makeCssLoaders());
+  } else {
+    const globalStyles = extraEntryParser(appConfig.styles, appRoot, 'styles');
+    let extractedCssEntryPoints: string[] = [];
+    // add entry points and lazy chunks
+    globalStyles.forEach(style => {
+      if (style.lazy) { lazyChunks.push(style.entry); }
+      if (!entryPoints[style.entry]) {
+        // since this entry point doesn't exist yet, it's going to only have
+        // extracted css and we can supress the entry point
+        extractedCssEntryPoints.push(style.entry);
+        entryPoints[style.entry] = (entryPoints[style.entry] || []).concat(style.path);
+      } else {
+        // existing entry point, just push the css in
+        entryPoints[style.entry].push(style.path);
+      }
+    });
+
+    // create css loaders for component css and for global css
+    extraRules.push(...makeCssLoaders(globalStyles.map((style) => style.path)));
+
+    if (extractedCssEntryPoints.length > 0) {
+      // don't emit the .js entry point for extracted styles
+      extraPlugins.push(new SuppressEntryChunksWebpackPlugin({ chunks: extractedCssEntryPoints }));
+    }
+  }
 
   const commonConfig: any = {
     resolve: {
       extensions: ['.ts', '.js'],
-      modules: [path.resolve(projectRoot, 'node_modules')]
+      modules: [nodeModules]
     },
-    context: path.resolve(__dirname, './'),
+    context: projectRoot,
     output: {
       path: path.resolve(projectRoot, appConfig.outDir, '../server'),
       filename: '[name].bundle.js',
@@ -37,58 +91,15 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
     },
     module: {
       rules: [
-        {
-          enforce: 'pre',
-          test: /\.js$/,
-          loader: 'source-map-loader',
-          exclude: [
-            /node_modules/
-          ]
-        },
-        {
-          test: /\.ts$/,
-          loaders: [{
-            loader: 'awesome-typescript-loader',
-            query: {
-              useForkChecker: true,
-              tsconfig: path.resolve(appRoot, appConfig.tsconfig)
-            }
-          }, {
-            loader: 'angular2-template-loader'
-          }],
-          exclude: [/\.(spec|e2e)\.ts$/]
-        },
-        // in main, load css as raw text
-        {
-          exclude: styles,
-          test: /\.css$/,
-          loaders: ['raw-loader', 'postcss-loader']
-        }, {
-          exclude: styles,
-          test: /\.styl$/,
-          loaders: ['raw-loader', 'postcss-loader', 'stylus-loader']
-        },
-        {
-          exclude: styles,
-          test: /\.less$/,
-          loaders: ['raw-loader', 'postcss-loader', 'less-loader']
-        }, {
-          exclude: styles,
-          test: /\.scss$|\.sass$/,
-          loaders: ['raw-loader', 'postcss-loader', 'sass-loader']
-        },
+        { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader', exclude: [nodeModules] },
 
+        { test: /\.json$/, loader: 'json-loader' },
+        { test: /\.(jpg|png|gif)$/, loader: 'url-loader?limit=10000' },
+        { test: /\.html$/, loader: 'raw-loader' },
 
-        // load global scripts using script-loader
-        {include: scripts, test: /\.js$/, loader: 'script-loader'},
-
-        {test: /\.json$/, loader: 'json-loader'},
-        {test: /\.(jpg|png|gif)$/, loader: 'url-loader?limit=10000'},
-        {test: /\.html$/, loader: 'raw-loader'},
-
-        {test: /\.(otf|ttf|woff|woff2)$/, loader: 'url?limit=10000'},
-        {test: /\.(eot|svg)$/, loader: 'file'}
-      ]
+        { test: /\.(otf|ttf|woff|woff2)$/, loader: 'url-loader?limit=10000' },
+        { test: /\.(eot|svg)$/, loader: 'file-loader' }
+      ].concat(extraRules)
     },
     plugins: [
       new webpack.ContextReplacementPlugin(
@@ -104,9 +115,9 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
         new RegExp(path.resolve(appRoot, appConfig.environments['source'])
           .replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&')),
         path.resolve(appRoot, appConfig.environments[environment])
-      ),
-    ],
-    entry: entry,
+      )
+    ].concat(extraPlugins),
+    entry: entryPoints,
     target: 'node',
     externals: checkNodeImport,
     node: {
@@ -120,81 +131,27 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
   };
   const devConfig: any = {
     devtool: 'inline-source-map',
-    module: {
-      rules: [
-        // outside of main, load it via style-loader for development builds
-        {
-          include: styles,
-          test: /\.css$/,
-          loaders: [
-            'style-loader',
-            'css-loader?sourcemap',
-            'postcss-loader'
-          ]
-        }, {
-          include: styles,
-          test: /\.styl$/,
-          loaders: [
-            'style-loader',
-            'css-loader?sourcemap',
-            'postcss-loader',
-            'stylus-loader?sourcemap'
-          ]
-        }, {
-          include: styles,
-          test: /\.less$/,
-          loaders: [
-            'style-loader',
-            'css-loader?sourcemap',
-            'postcss-loader',
-            'less-loader?sourcemap'
-          ]
-        }, {
-          include: styles,
-          test: /\.scss$|\.sass$/,
-          loaders: [
-            'style-loader',
-            'css-loader?sourcemap',
-            'postcss-loader',
-            'sass-loader?sourcemap'
-          ]
+    plugins: [
+      new ExtractTextPlugin({filename: '[name].bundle.css'}),
+      new webpack.LoaderOptionsPlugin({
+        test: /\.(css|scss|sass|less|styl)$/,
+        options: {
+          postcss: [autoprefixer()],
+          cssLoader: { sourceMap: sourcemap },
+          sassLoader: { sourceMap: sourcemap },
+          lessLoader: { sourceMap: sourcemap },
+          stylusLoader: { sourceMap: sourcemap },
+          // context needed as a workaround https://github.com/jtangelder/sass-loader/issues/285
+          context: projectRoot,
         },
-      ]
-    }
+      })
+    ]
   };
   const prodConfig: any = {
     devtool: 'source-map',
-    module: {
-      rules: [
-        // outside of main, load it via extract-text-plugin for production builds
-        {
-          include: styles,
-          test: /\.css$/,
-          loaders: ExtractTextPlugin.extract([
-            'css-loader?sourcemap&minimize', 'postcss-loader'
-          ])
-        }, {
-          include: styles,
-          test: /\.styl$/,
-          loaders: ExtractTextPlugin.extract([
-            'css-loader?sourcemap&minimize', 'postcss-loader', 'stylus-loader?sourcemap'
-          ])
-        }, {
-          include: styles,
-          test: /\.less$/,
-          loaders: ExtractTextPlugin.extract([
-            'css-loader?sourcemap&minimize', 'postcss-loader', 'less-loader?sourcemap'
-          ])
-        }, {
-          include: styles,
-          test: /\.scss$|\.sass$/,
-          loaders: ExtractTextPlugin.extract([
-            'css-loader?sourcemap&minimize', 'postcss-loader', 'sass-loader?sourcemap'
-          ])
-        },
-      ]
-    },
     plugins: [
+      new ExtractTextPlugin('[name].[chunkhash].bundle.css'),
+      new webpack.LoaderOptionsPlugin({ minimize: true }),
       new webpack.optimize.UglifyJsPlugin(<any>{
         mangle: {screw_ie8: true},
         compress: {screw_ie8: true},
@@ -206,6 +163,22 @@ export function getWebpackNodeConfig(projectRoot: string, environment: string, a
         test: /\.js$|\.html$/,
         threshold: 10240,
         minRatio: 0.8
+      }),
+      // LoaderOptionsPlugin needs to be fully duplicated because webpackMerge will replace it.
+      new webpack.LoaderOptionsPlugin({
+        test: /\.(css|scss|sass|less|styl)$/,
+        options: {
+          postcss: [
+            autoprefixer(),
+            postcssDiscardComments
+          ],
+          cssLoader: { sourceMap: sourcemap },
+          sassLoader: { sourceMap: sourcemap },
+          lessLoader: { sourceMap: sourcemap },
+          stylusLoader: { sourceMap: sourcemap },
+          // context needed as a workaround https://github.com/jtangelder/sass-loader/issues/285
+          context: projectRoot,
+        }
       })
     ]
   };

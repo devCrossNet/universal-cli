@@ -4,13 +4,15 @@ import { isMobileTest, isUniversalTest } from '../utils/utils';
 import { expectFileToExist } from '../utils/fs';
 import { updateTsConfig, updateJsonFile } from '../utils/project';
 import { gitClean, gitCommit } from '../utils/git';
+import { getGlobalVariable } from '../utils/env';
 
 
 let packages = require('../../../lib/packages');
 
 
-export default function (argv: any) {
-  let createProject: any = null;
+export default function() {
+  const argv = getGlobalVariable('argv');
+  let createProject = null;
 
   // This is a dangerous flag, but is useful for testing packages only.
   if (argv.noproject) {

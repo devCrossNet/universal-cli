@@ -2,7 +2,7 @@ import * as glob from 'glob';
 import { writeFile, expectFileToMatch } from '../../../utils/fs';
 import { ng } from '../../../utils/process';
 import { stripIndents } from 'common-tags';
-import { getClientDist, getAppMain } from '../../../utils/utils';
+import { getClientDist } from '../../../utils/utils';
 
 export default function () {
   return writeFile('src/styles.css', stripIndents`

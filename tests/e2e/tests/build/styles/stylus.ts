@@ -37,5 +37,6 @@ export default function () {
       /body\s*{\s*background-color: #00f;\s*}/))
     .then(() => expectFileToMatch(`${getClientDist()}styles.bundle.css`,
       /p\s*{\s*background-color: #f00;\s*}/))
-    .then(() => expectFileToMatch(`${getClientDist()}/${getAppMain()}.bundle.js`, /.outer.*.inner.*background:\s*#[fF]+/));
+    .then(() => expectFileToMatch(`${getClientDist()}/${getAppMain()}.bundle.js`,
+      /.outer.*.inner.*background:\s*#[fF]+/));
 }

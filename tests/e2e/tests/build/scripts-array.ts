@@ -34,10 +34,14 @@ export default function () {
     .then(() => expectFileToMatch(`${getClientDist()}/scripts.bundle.js`, 'string-script'))
     .then(() => expectFileToMatch(`${getClientDist()}/scripts.bundle.js`, 'input-script'))
     .then(() => expectFileToMatch(`${getClientDist()}/lazy-script.bundle.js`, 'lazy-script'))
-    .then(() => expectFileToMatch(`${getClientDist()}/renamed-script.bundle.js`, 'pre-rename-script'))
-    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-script.bundle.js`, 'pre-rename-lazy-script'))
-    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`, 'common-entry-script'))
-    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`, '.common-entry-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-script.bundle.js`,
+      'pre-rename-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-script.bundle.js`,
+      'pre-rename-lazy-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`,
+      'common-entry-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`,
+      '.common-entry-style'))
     // index.html lists the right bundles
     .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <link href="common-entry.bundle.css" rel="stylesheet">

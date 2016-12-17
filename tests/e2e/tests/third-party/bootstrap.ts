@@ -2,7 +2,7 @@ import { npm, ng } from '../../utils/process';
 import { updateJsonFile } from '../../utils/project';
 import { expectFileToMatch } from '../../utils/fs';
 import { oneLineTrim } from 'common-tags';
-import { isUniversalTest, getAppMain, getClientDist } from '../../utils/utils';
+import { getAppMain, getClientDist } from '../../utils/utils';
 
 
 export default function () {

@@ -12,11 +12,11 @@ export default function () {
     .then(() => npm('install', 'bootstrap@next'))
     .then(() => updateJsonFile('angular-cli.json', configJson => {
       const app = configJson['apps'][0];
-      app['styles'].push(`../node_modules/bootstrap/${getClientDist()}/css/bootstrap.css`);
+      app['styles'].push(`../node_modules/bootstrap/${getClientDist()}css/bootstrap.css`);
       app['scripts'].push(
-        `../node_modules/jquery/${getClientDist()}/jquery.js`,
-        `../node_modules/tether/${getClientDist()}/js/tether.js`,
-        `../node_modules/bootstrap/${getClientDist()}/js/bootstrap.js`
+        `../node_modules/jquery/${getClientDist()}jquery.js`,
+        `../node_modules/tether/${getClientDist()}js/tether.js`,
+        `../node_modules/bootstrap/${getClientDist()}js/bootstrap.js`
       );
     }))
     .then(() => ng('build'))

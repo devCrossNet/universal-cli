@@ -3,6 +3,7 @@ import * as webpack from 'webpack';
 const WebpackMd5Hash = require('webpack-md5-hash');
 const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 import {CompressionPlugin} from '../lib/webpack/compression-plugin';
 const autoprefixer = require('autoprefixer');
 const postcssDiscardComments = require('postcss-discard-comments');
@@ -26,16 +27,24 @@ export const getWebpackProdConfigPartial = function(projectRoot: string,
   let universalPartial: any = {};
 
   if (appConfig.universal === true) {
-    universalPartial.module = {
-      rules: [
-        {
-          test: /index\.html$/,
-          loader: 'string-replace',
-          query: {
-            search: '<script src="http://localhost:35729/livereload.js?snipver=1"></script>',
-            replace: ''
+    universalPartial = {
+      module: {
+        rules: [
+          {
+            test: /index.html$/,
+            loader: StringReplacePlugin.replace({
+              replacements: [
+                {
+                  pattern: /<script src="http:\/\/localhost:35729\/livereload\.js\?snipver=1"><\/script>/ig,
+                  replacement: function () { return ''; }
+                }
+              ]
+            })
           }
-        }
+        ]
+      },
+      plugins: [
+        new StringReplacePlugin()
       ]
     };
   }

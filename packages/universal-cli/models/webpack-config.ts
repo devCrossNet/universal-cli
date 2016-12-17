@@ -85,7 +85,8 @@ export class NgCliWebpackConfig {
         getWebpackNodeConfig(
           this.ngCliProject.root,
           environment,
-          appConfig
+          appConfig,
+          sourcemap
         ),
         customServerConfig
       ));

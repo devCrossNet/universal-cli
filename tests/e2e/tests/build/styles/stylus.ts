@@ -7,6 +7,7 @@ import {
 import { ng } from '../../../utils/process';
 import { stripIndents } from 'common-tags';
 import { updateJsonFile } from '../../../utils/project';
+import { getClientDist, getAppMain } from '../../../utils/utils';
 
 export default function () {
   return writeMultipleFiles({
@@ -32,9 +33,9 @@ export default function () {
     .then(() => replaceInFile('src/app/app.component.ts',
       './app.component.css', './app.component.styl'))
     .then(() => ng('build'))
-    .then(() => expectFileToMatch('dist/styles.bundle.css',
+    .then(() => expectFileToMatch(`${getClientDist()}styles.bundle.css`,
       /body\s*{\s*background-color: #00f;\s*}/))
-    .then(() => expectFileToMatch('dist/styles.bundle.css',
+    .then(() => expectFileToMatch(`${getClientDist()}styles.bundle.css`,
       /p\s*{\s*background-color: #f00;\s*}/))
-    .then(() => expectFileToMatch('dist/main.bundle.js', /.outer.*.inner.*background:\s*#[fF]+/));
+    .then(() => expectFileToMatch(`${getClientDist()}/${getAppMain()}.bundle.js`, /.outer.*.inner.*background:\s*#[fF]+/));
 }

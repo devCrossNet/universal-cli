@@ -2,6 +2,7 @@ import {
   writeMultipleFiles,
   expectFileToMatch
 } from '../../utils/fs';
+import { getClientDist, getAppMain } from '../../utils/utils';
 import { ng } from '../../utils/process';
 import { updateJsonFile } from '../../utils/project';
 import { oneLineTrim } from 'common-tags';
@@ -30,23 +31,23 @@ export default function () {
     }))
     .then(() => ng('build'))
     // files were created successfully
-    .then(() => expectFileToMatch('dist/scripts.bundle.js', 'string-script'))
-    .then(() => expectFileToMatch('dist/scripts.bundle.js', 'input-script'))
-    .then(() => expectFileToMatch('dist/lazy-script.bundle.js', 'lazy-script'))
-    .then(() => expectFileToMatch('dist/renamed-script.bundle.js', 'pre-rename-script'))
-    .then(() => expectFileToMatch('dist/renamed-lazy-script.bundle.js', 'pre-rename-lazy-script'))
-    .then(() => expectFileToMatch('dist/common-entry.bundle.js', 'common-entry-script'))
-    .then(() => expectFileToMatch('dist/common-entry.bundle.css', '.common-entry-style'))
+    .then(() => expectFileToMatch(`${getClientDist()}/scripts.bundle.js`, 'string-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/scripts.bundle.js`, 'input-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/lazy-script.bundle.js`, 'lazy-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-script.bundle.js`, 'pre-rename-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/renamed-lazy-script.bundle.js`, 'pre-rename-lazy-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.js`, 'common-entry-script'))
+    .then(() => expectFileToMatch(`${getClientDist()}/common-entry.bundle.css`, '.common-entry-style'))
     // index.html lists the right bundles
-    .then(() => expectFileToMatch('dist/index.html', oneLineTrim`
+    .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <link href="common-entry.bundle.css" rel="stylesheet">
     `))
-    .then(() => expectFileToMatch('dist/index.html', oneLineTrim`
+    .then(() => expectFileToMatch(`${getClientDist()}/index.html`, oneLineTrim`
       <script type="text/javascript" src="inline.bundle.js"></script>
       <script type="text/javascript" src="renamed-script.bundle.js"></script>
       <script type="text/javascript" src="common-entry.bundle.js"></script>
       <script type="text/javascript" src="scripts.bundle.js"></script>
       <script type="text/javascript" src="vendor.bundle.js"></script>
-      <script type="text/javascript" src="main.bundle.js"></script>
+      <script type="text/javascript" src="${getAppMain()}.bundle.js"></script>
     `));
 }

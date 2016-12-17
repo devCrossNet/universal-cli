@@ -90,6 +90,7 @@
     "silent-error": "^1.0.0",
     "source-map-loader": "^0.1.5",
     "sourcemap-istanbul-instrumenter-loader": "^0.2.0",
+    "string-replace-webpack-plugin": "0.0.4",
     "style-loader": "^0.13.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.1.0",

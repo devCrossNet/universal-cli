@@ -35,7 +35,8 @@ export const getWebpackProdConfigPartial = function(projectRoot: string,
             loader: StringReplacePlugin.replace({
               replacements: [
                 {
-                  pattern: /<script src="http:\/\/localhost:35729\/livereload\.js\?snipver=1"><\/script>/ig,
+                  pattern:
+  /<script src="http:\/\/localhost:35729\/livereload\.js\?snipver=1"><\/script>/ig,
                   replacement: function () { return ''; }
                 }
               ]

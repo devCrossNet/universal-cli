@@ -2,10 +2,12 @@ import { npm, ng } from '../../utils/process';
 import { updateJsonFile } from '../../utils/project';
 import { expectFileToMatch } from '../../utils/fs';
 import { oneLineTrim } from 'common-tags';
-import { getAppMain, getClientDist } from '../../utils/utils';
+import { isUniversalTest, getAppMain, getClientDist } from '../../utils/utils';
 
 
 export default function () {
+  if (isUniversalTest)
+    return Promise.resolve();
   return Promise.resolve()
     .then(() => npm('install', 'bootstrap@next'))
     .then(() => updateJsonFile('angular-cli.json', configJson => {

@@ -6,17 +6,15 @@ import { isUniversalTest, getAppMain, getClientDist } from '../../utils/utils';
 
 
 export default function () {
-  if (isUniversalTest)
-    return Promise.resolve();
   return Promise.resolve()
     .then(() => npm('install', 'bootstrap@next'))
     .then(() => updateJsonFile('angular-cli.json', configJson => {
       const app = configJson['apps'][0];
-      app['styles'].push(`../node_modules/bootstrap/${getClientDist()}css/bootstrap.css`);
+      app['styles'].push(`../node_modules/bootstrap/dist/css/bootstrap.css`);
       app['scripts'].push(
-        `../node_modules/jquery/${getClientDist()}jquery.js`,
-        `../node_modules/tether/${getClientDist()}js/tether.js`,
-        `../node_modules/bootstrap/${getClientDist()}js/bootstrap.js`
+        `../node_modules/jquery/dist/jquery.js`,
+        `../node_modules/tether/dist/js/tether.js`,
+        `../node_modules/bootstrap/dist/js/bootstrap.js`
       );
     }))
     .then(() => ng('build'))

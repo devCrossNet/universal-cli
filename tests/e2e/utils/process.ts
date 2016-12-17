@@ -105,10 +105,8 @@ export function silentExecAndWaitForOutputToMatch(cmd: string, args: string[], m
 }
 
 export function ng(...args: string[]) {
-  if (args[0] == 'serve' || args[0] == 'test') {
+  if (args[0] == 'build' || args[0] == 'serve' || args[0] == 'test') {
     return silentNg(...args, '--no-progress');
-  } else if (args[0] == 'build'){
-    return verboseNg(...args, '--verbose');
   } else {
     return _exec({}, 'ung', args);
   }
@@ -116,10 +114,6 @@ export function ng(...args: string[]) {
 
 export function silentNg(...args: string[]) {
   return _exec({silent: true}, 'ung', args);
-}
-
-export function verboseNg(...args: string[]) {
-  return _exec({}, 'ung', args);
 }
 
 export function silentNpm(...args: string[]) {

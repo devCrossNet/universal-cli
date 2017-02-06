@@ -1,9 +1,11 @@
 /**
  * This file and `main.browser.ts` are identical, at the moment(!)
- * By splitting these, you're able to create logic, imports, etc that are "Platform" specific.
+ * By modifying the uniqueTo* definitions, you're able to create logic,
+ * imports, etc that are "Platform" specific.
+ *
  * If you want your code to be completely Universal and don't need that
- * You can also just have 1 file, that is imported into both
- * client.ts and server.ts
+ * You can also modiy just the commonModule definition
+ *
  */
 
 import { NgModule } from '@angular/core';

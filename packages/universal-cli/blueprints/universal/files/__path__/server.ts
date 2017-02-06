@@ -8,7 +8,7 @@ import * as express from 'express';
 import * as compression from 'compression';
 import { createEngine } from 'angular2-express-engine';
 import { enableProdMode } from '@angular/core';
-import { AppModule } from './app/app.node.module';
+import { AppNodeModule } from './app/app.module';
 import { environment } from './environments/environment';
 import { routes } from './server.routes';
 
@@ -56,7 +56,7 @@ function ngApp(req: any, res: any) {
   res.render('index', {
     req,
     res,
-    ngModule: AppModule,
+    ngModule: AppNodeModule,
     preboot: false,
     baseUrl: '/',
     requestUrl: req.originalUrl,

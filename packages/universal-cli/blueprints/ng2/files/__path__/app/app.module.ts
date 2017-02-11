@@ -17,7 +17,7 @@ import { AppComponent } from './app.component';
     HttpModule<% if (routing) { %>,
     AppRoutingModule<% } %>
   ],
-  providers: [],<% if(!universal) { %>
+  providers: [],<% if(universal) { %>
   exports: [AppComponent]<% } else { %>
   bootstrap: [AppComponent]<% } %>
 })

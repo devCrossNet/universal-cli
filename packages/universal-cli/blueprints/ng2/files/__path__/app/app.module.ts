@@ -1,5 +1,6 @@
 <% if(!universal) { %>
-import { BrowserModule } from '@angular/platform-browser';<% } %>
+import { BrowserModule } from '@angular/platform-browser';<% }  else { %>
+import { CommonModule } from '@angular/common'; <% } %>
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';<% if (routing) { %>
@@ -12,7 +13,8 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [<% if(!universal) { %>
-    BrowserModule,<% } %>
+    BrowserModule,<% } else { %>
+    CommonModule, <% } %>
     FormsModule,
     HttpModule<% if (routing) { %>,
     AppRoutingModule<% } %>

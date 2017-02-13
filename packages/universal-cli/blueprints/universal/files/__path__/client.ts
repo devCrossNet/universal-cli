@@ -6,7 +6,7 @@ import './__2.1.1.workaround.ts'; // temporary until 2.1.1 things are patched in
 import { enableProdMode } from '@angular/core';
 import { environment } from './environments/environment';
 import { platformUniversalDynamic } from 'angular2-universal';
-import { AppModule } from './app/app.browser.module';
+import { AppModule } from './app/app.module';
 
 /**
  * enable prod mode for production environments

@@ -25,7 +25,7 @@ export default function() {
     .then(() => expectFileToMatch(`${getClientDist()}/client.bundle.js`, /Bonjour i18n!/))
     .then(() => ng('build', '--aot'))
     .then(() => expectToFail(() => {
-      return expectFileToMatch(`${getClientDist()}/client.bundle.js`, /Bonjour i18n!/)
+      return expectFileToMatch(`${getClientDist()}/client.bundle.js`, /Bonjour i18n!/);
     }))
     .then(() => expectFileToMatch(`${getClientDist()}/client.bundle.js`, /Hello i18n!/));
 }

@@ -1,5 +1,5 @@
 <% if(!universal) { %>
-import { BrowserModule } from '@angular/platform-browser';<% }  else { %>
+import { BrowserModule } from '@angular/platform-browser';<% } else { %>
 import { CommonModule } from '@angular/common'; <% } %>
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';

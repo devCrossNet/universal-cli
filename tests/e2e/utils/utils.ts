@@ -22,8 +22,10 @@ export function getClientDist() {
   return isUniversalTest() ? 'dist/client/' : 'dist/';
 }
 
-export function getMainAppModule() {
-  return isUniversalTest() ? 'BrowserAppModule' : 'AppModule';
+export function getMainAppModuleRegex() {
+  return isUniversalTest() ?
+    /bootstrapModuleFactory.*\/\* BrowserAppModuleNgFactory \*\// :
+    /bootstrapModuleFactory.*\/\* AppModuleNgFactory \*\//;
 }
 
 export function wait(msecs: number) {

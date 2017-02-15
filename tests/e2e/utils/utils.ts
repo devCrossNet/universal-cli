@@ -22,6 +22,10 @@ export function getClientDist() {
   return isUniversalTest() ? 'dist/client/' : 'dist/';
 }
 
+export function getMainAppModule() {
+  return isUniversalTest() ? 'BrowserAppModule' : 'AppModule';
+}
+
 export function wait(msecs: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, msecs);

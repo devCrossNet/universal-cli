@@ -51,7 +51,8 @@ export default Blueprint.extend({
       inlineStyle: options.inlineStyle,
       inlineTemplate: options.inlineTemplate,
       ng4: options.ng4,
-      tests: this.tests
+      tests: this.tests,
+      universal: options.universal
     };
   },
 

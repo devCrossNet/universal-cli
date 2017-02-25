@@ -119,7 +119,14 @@ const NewCommand = Command.extend({
       default: false,
       aliases: ['it'],
       description: 'Should have an inline template.'
-     }
+    },
+    {
+      name: 'universal',
+      type: Boolean,
+      default: false,
+      aliases: ['u'],
+      description: 'Generates a server rendered client app. Forces --ng4.'
+    }
   ],
 
   isProject: function (projectPath: string) {

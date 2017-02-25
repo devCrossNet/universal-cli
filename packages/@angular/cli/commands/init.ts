@@ -20,7 +20,8 @@ const InitCommand: any = Command.extend({
     { name: 'prefix', type: String, default: 'app', aliases: ['p'] },
     { name: 'routing', type: Boolean, default: false },
     { name: 'inline-style', type: Boolean, default: false, aliases: ['is'] },
-    { name: 'inline-template', type: Boolean, default: false, aliases: ['it'] }
+    { name: 'inline-template', type: Boolean, default: false, aliases: ['it'] },
+    { name: 'universal', type: Boolean, default: false, aliases: ['u'] }
   ],
 
   anonymousOptions: ['<glob-pattern>'],

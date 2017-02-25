@@ -75,9 +75,10 @@ export default Task.extend({
       inlineStyle: commandOptions.inlineStyle,
       inlineTemplate: commandOptions.inlineTemplate,
       ignoredUpdateFiles: ['favicon.ico'],
-      ng4: commandOptions.ng4,
+      ng4: commandOptions.universal || commandOptions.ng4,
       skipGit: commandOptions.skipGit,
-      skipTests: commandOptions.skipTests
+      skipTests: commandOptions.skipTests,
+      universal: commandOptions.universal
     };
 
     validateProjectName(packageName);

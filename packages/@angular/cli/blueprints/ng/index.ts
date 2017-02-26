@@ -15,7 +15,8 @@ export default Blueprint.extend({
     { name: 'routing', type: Boolean, default: false },
     { name: 'inline-style', type: Boolean, default: false, aliases: ['is'] },
     { name: 'inline-template', type: Boolean, default: false, aliases: ['it'] },
-    { name: 'skip-git', type: Boolean, default: false, aliases: ['sg'] }
+    { name: 'skip-git', type: Boolean, default: false, aliases: ['sg'] },
+    { name: 'universal', type: Boolean, default: false, aliases: ['u'] }
   ],
 
   beforeInstall: function(options: any) {
@@ -23,6 +24,16 @@ export default Blueprint.extend({
       return Blueprint.ignoredUpdateFiles =
         Blueprint.ignoredUpdateFiles.concat(options.ignoredUpdateFiles);
     }
+  },
+
+  afterInstall: function (options: any) {
+    const bluePrints = [];
+
+    if (options.universal) {
+      bluePrints.push(Blueprint.load(path.join(__dirname, '../server')).install(options));
+    }
+
+    return Promise.all(bluePrints);
   },
 
   locals: function(options: any) {

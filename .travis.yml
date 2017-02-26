@@ -12,6 +12,8 @@ matrix:
   allow_failures:
     - node_js: "7"
     - env: NODE_SCRIPT="tests/run_e2e.js --nightly --ng4"
+    - env: NODE_SCRIPT="tests/run_e2e.js --universal --glob=tests/build/**"
+    - env: NODE_SCRIPT="tests/run_e2e.js --universal --ignore=**/tests/build/**"
   include:
     - node_js: "6"
       os: linux
@@ -37,12 +39,6 @@ matrix:
     - node_js: "6"
       os: linux
       env: NODE_SCRIPT="tests/run_e2e.js --ng4 --ignore=**/tests/build/**"
-    - node_js: "6"
-      os: linux
-      env: NODE_SCRIPT="tests/run_e2e.js --universal --glob=tests/build/**"
-    - node_js: "6"
-      os: linux
-      env: NODE_SCRIPT="tests/run_e2e.js --universal --ignore=**/tests/build/**"
 
     # Optional builds.
     - node_js: "6"
@@ -51,6 +47,12 @@ matrix:
     - node_js: "7"
       os: linux
       env: NODE_SCRIPT=tests/run_e2e.js
+    - node_js: "6"
+      os: linux
+      env: NODE_SCRIPT="tests/run_e2e.js --universal --glob=tests/build/**"
+    - node_js: "6"
+      os: linux
+      env: NODE_SCRIPT="tests/run_e2e.js --universal --ignore=**/tests/build/**"
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0; fi

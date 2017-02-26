@@ -36,7 +36,10 @@ export function createProject(name: string, ...args: string[]) {
 
   return Promise.resolve()
     .then(() => process.chdir(getGlobalVariable('tmp-root')))
-    .then(() => ng('new', name, '--skip-install', ...(argv['ng4'] ? ['--ng4'] : []), ...args))
+    .then(() => ng('new', name, '--skip-install',
+      ...(argv['ng4'] ? ['--ng4'] : []),
+      ...(argv['universal'] ? ['--universal'] : []),
+      ...args))
     .then(() => process.chdir(name))
     .then(() => updateJsonFile('package.json', json => {
       Object.keys(packages).forEach(pkgName => {

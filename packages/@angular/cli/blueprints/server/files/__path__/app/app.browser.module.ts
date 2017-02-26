@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-server';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';

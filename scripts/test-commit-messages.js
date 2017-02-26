@@ -32,7 +32,7 @@ logger
 // Note: This is based on the gulp task found in the angular/angular repository
 
 exec(
-  'git fetch origin rebase && git log --reverse --format=%s origin/rebase.. --no-merges',
+  'git fetch origin master && git log --reverse --format=%s origin/master.. --no-merges',
   (error, stdout, stderr) => {
     if (error) {
       logger.fatal(stderr);

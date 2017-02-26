@@ -7,7 +7,7 @@ export default function() {
   const modulePath = join('src', 'app', 'app.module.ts');
 
   return ng('generate', 'component', 'test-component', '--export')
-    .then(() => expectFileToMatch(modulePath, 'exports: [TestComponentComponent]'))
+    .then(() => expectFileToMatch(modulePath, 'TestComponentComponent'))
 
     // Try to run the unit tests.
     .then(() => ng('test', '--single-run'));

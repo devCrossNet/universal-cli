@@ -1,3 +1,10 @@
+<a name="1.0.0-alpha.universal.4"></a>
+# [1.0.0-alpha.universal.4](https://github.com/devCrossNet/universal-cli/compare/v1.0.0-alpha.universal.3...v1.0.0-alpha.universal.4) (2017-3-2)
+
+### Features
+
+* **build:** enabled AoT Compilation for Browser App
+
 <a name="1.0.0-alpha.universal.3"></a>
 # [1.0.0-alpha.universal.3](https://github.com/devCrossNet/universal-cli/compare/v1.0.0-alpha.universal.2-2...v1.0.0-alpha.universal.3) (2016-12-29)
 

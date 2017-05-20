@@ -174,13 +174,25 @@
             },
             "additionalProperties": false
           },
-          "environmentSource":{
+          "environmentSource": {
             "description": "Source file for environment config.",
             "type": "string"
           },
           "environments": {
             "description": "Name and corresponding file for environment config.",
             "type": "object",
+            "additionalProperties": true
+          },
+          "webpackConfigs": {
+            "description": "path to custom webpack configs.",
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                }
+              ]
+            },
             "additionalProperties": true
           }
         },
@@ -341,12 +353,19 @@
             },
             "viewEncapsulation": {
               "description": "Specifies the view encapsulation strategy.",
-              "enum": ["Emulated", "Native", "None"],
+              "enum": [
+                "Emulated",
+                "Native",
+                "None"
+              ],
               "type": "string"
             },
             "changeDetection": {
               "description": "Specifies the change detection strategy.",
-              "enum": ["Default", "OnPush"],
+              "enum": [
+                "Default",
+                "OnPush"
+              ],
               "type": "string"
             }
           }
@@ -455,19 +474,16 @@
               "description": "The host the application will be served on.",
               "type": "string",
               "default": "localhost"
-
             },
             "ssl": {
               "description": "Enables ssl for the application.",
               "type": "boolean",
               "default": false
-
             },
             "sslKey": {
               "description": "The ssl key used by the server.",
               "type": "string",
               "default": "ssl/server.key"
-
             },
             "sslCert": {
               "description": "The ssl certificate used by the server.",
@@ -481,7 +497,12 @@
     },
     "packageManager": {
       "description": "Specify which package manager tool to use.",
-      "enum": [ "npm", "cnpm", "yarn", "default" ],
+      "enum": [
+        "npm",
+        "cnpm",
+        "yarn",
+        "default"
+      ],
       "default": "default",
       "type": "string"
     },

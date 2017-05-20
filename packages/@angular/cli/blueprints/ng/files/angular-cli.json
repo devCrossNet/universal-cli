@@ -26,12 +26,15 @@
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
-      }
+      },
+      "webpackConfigs": [
+        "config/webpack.custom.ts"
+      ]
     }
   ],
   "e2e": {
     "protractor": {
-      "config": "./protractor.conf.js"
+      "config": "./config/protractor.conf.js"
     }
   },
   "lint": [
@@ -47,7 +50,7 @@
   ],
   "test": {
     "karma": {
-      "config": "./karma.conf.js"
+      "config": "./config/karma.conf.js"
     }
   },
   "defaults": {

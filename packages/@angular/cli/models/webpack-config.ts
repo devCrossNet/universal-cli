@@ -22,6 +22,7 @@ export interface WebpackConfigOptions {
 export class NgCliWebpackConfig {
   public config: any;
   public wco: WebpackConfigOptions;
+
   constructor(buildOptions: BuildOptions, appConfig: any) {
 
     this.validateBuildOptions(buildOptions);
@@ -49,6 +50,14 @@ export class NgCliWebpackConfig {
         ? getAotConfig(this.wco)
         : getNonAotConfig(this.wco);
       webpackConfigs.push(typescriptConfigPartial);
+    }
+
+    if (this.wco.appConfig.webpackConfigs && this.wco.appConfig.webpackConfigs.length > 0) {
+      this.wco.appConfig.webpackConfigs.forEach((cfgPath: string) => {
+        const cfg = require(path.join(path.resolve(process.cwd()), cfgPath))
+          .getConfig(this.wco);
+        webpackConfigs.push(cfg);
+      });
     }
 
     this.config = webpackMerge(webpackConfigs);
